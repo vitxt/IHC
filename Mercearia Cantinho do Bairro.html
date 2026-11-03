@@ -1,0 +1,1716 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mercearia Cantinho do Bairro - Do Nosso Bairro pra Sua Mesa</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        emerald: {
+                            50: '#ecfdf5',
+                            100: '#d1fae5',
+                            500: '#10b981',
+                            600: '#059669',
+                            700: '#047857',
+                            800: '#065f46',
+                            900: '#064e3b',
+                        },
+                        amber: {
+                            50: '#fffbeb',
+                            100: '#fef3c7',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                        },
+                        cream: '#faf6f0',
+                        warmgray: '#f5f2eb'
+                    },
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #fdfbf7;
+            color: #2d3748;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .badge-pulse {
+            animation: pulse-ring 2s infinite;
+        }
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5); }
+            70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+        .page-fade {
+            animation: fadeIn 0.25s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="min-h-full flex flex-col justify-between selection:bg-emerald-500 selection:text-white">
+
+    <!-- Top Announcement Bar -->
+    <div class="bg-emerald-900 text-emerald-100 text-xs sm:text-sm py-2 px-4 text-center font-medium flex items-center justify-center gap-2">
+        <span class="bg-amber-500 text-slate-900 text-[10px] font-bold px-2 py-0.5 rounded-full uppercase tracking-wider">Frete Grátis</span>
+        <span>Entregas grátis para compras acima de R$ 60,00 na região do bairro!</span>
+        <span class="hidden md:inline text-emerald-300">| ☎️ Pedidos Rápidos: (44) 3222-8900</span>
+    </div>
+
+    <!-- Main Navigation Header -->
+    <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-emerald-100 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20 gap-4">
+                
+                <!-- Logo -->
+                <a href="#home" onclick="navigateTo('home')" class="flex items-center gap-3 group focus:outline-none">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-emerald-600 to-emerald-400 flex items-center justify-center text-white text-2xl shadow-md group-hover:scale-105 transition-transform">
+                        <i class="fa-solid fa-basket-shopping"></i>
+                    </div>
+                    <div>
+                        <span class="text-xl sm:text-2xl font-extrabold text-slate-800 tracking-tight block leading-none">
+                            Cantinho<span class="text-emerald-600">.</span>
+                        </span>
+                        <span class="text-xs text-amber-600 font-semibold tracking-wider uppercase">Mercearia de Bairro</span>
+                    </div>
+                </a>
+
+                <!-- Quick Search Bar (Desktop) -->
+                <div class="hidden md:flex flex-1 max-w-md mx-6 relative">
+                    <input type="text" id="headerSearchInput" onkeyup="handleHeaderSearch(event)" placeholder="Busque pão francês, leite, bananas, café..." 
+                        class="w-full pl-10 pr-10 py-2.5 bg-slate-100 border border-transparent rounded-full text-sm text-slate-800 focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 transition-all outline-none">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-400"></i>
+                    <button onclick="executeHeaderSearch()" class="absolute right-2 top-1.5 bg-emerald-600 text-white w-7 h-7 rounded-full flex items-center justify-center hover:bg-emerald-700 transition">
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </button>
+                </div>
+
+                <!-- Desktop Navigation Links -->
+                <nav class="hidden lg:flex items-center gap-1 font-semibold text-sm text-slate-700">
+                    <button onclick="navigateTo('home')" id="nav-home" class="nav-btn px-3.5 py-2 rounded-xl hover:text-emerald-600 hover:bg-emerald-50 transition">Início</button>
+                    <button onclick="navigateTo('catalog')" id="nav-catalog" class="nav-btn px-3.5 py-2 rounded-xl hover:text-emerald-600 hover:bg-emerald-50 transition">Catálogo Completo</button>
+                    <button onclick="navigateTo('about')" id="nav-about" class="nav-btn px-3.5 py-2 rounded-xl hover:text-emerald-600 hover:bg-emerald-50 transition">Nossa História</button>
+                    <button onclick="navigateTo('contact')" id="nav-contact" class="nav-btn px-3.5 py-2 rounded-xl hover:text-emerald-600 hover:bg-emerald-50 transition">Contato & FAQ</button>
+                </nav>
+
+                <!-- Header Actions (Cart & Mobile Menu Button) -->
+                <div class="flex items-center gap-3">
+                    <!-- Sacola Quick Drawer Trigger -->
+                    <button onclick="toggleQuickCart()" class="relative bg-emerald-50 border border-emerald-200 text-emerald-800 hover:bg-emerald-100 px-3.5 py-2 rounded-xl flex items-center gap-2.5 transition font-semibold text-sm">
+                        <i class="fa-solid fa-bag-shopping text-emerald-600 text-lg"></i>
+                        <span class="hidden sm:inline">Minha Sacola</span>
+                        <span id="headerCartCount" class="bg-amber-500 text-slate-900 text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center shadow">0</span>
+                    </button>
+
+                    <!-- Mobile Menu Button -->
+                    <button onclick="toggleMobileNav()" class="lg:hidden p-2 rounded-xl text-slate-600 hover:bg-slate-100 transition">
+                        <i class="fa-solid fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Search Bar -->
+            <div class="md:hidden pb-3">
+                <div class="relative">
+                    <input type="text" id="mobileHeaderSearchInput" onkeyup="handleHeaderSearch(event)" placeholder="O que você precisa hoje?" 
+                        class="w-full pl-9 pr-9 py-2 bg-slate-100 border border-slate-200 rounded-full text-xs text-slate-800 focus:bg-white focus:border-emerald-500 outline-none">
+                    <i class="fa-solid fa-magnifying-glass absolute left-3 top-2.5 text-slate-400 text-xs"></i>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Navigation Menu -->
+        <div id="mobileNavMenu" class="hidden lg:hidden bg-white border-b border-slate-200 px-4 pt-2 pb-4 space-y-2">
+            <button onclick="navigateTo('home'); toggleMobileNav();" class="block w-full text-left px-4 py-2.5 rounded-lg text-slate-700 font-medium hover:bg-emerald-50 hover:text-emerald-600">🏠 Página Inicial</button>
+            <button onclick="navigateTo('catalog'); toggleMobileNav();" class="block w-full text-left px-4 py-2.5 rounded-lg text-slate-700 font-medium hover:bg-emerald-50 hover:text-emerald-600">🛒 Catálogo de Produtos</button>
+            <button onclick="navigateTo('about'); toggleMobileNav();" class="block w-full text-left px-4 py-2.5 rounded-lg text-slate-700 font-medium hover:bg-emerald-50 hover:text-emerald-600">❤️ Sobre A Mercearia</button>
+            <button onclick="navigateTo('contact'); toggleMobileNav();" class="block w-full text-left px-4 py-2.5 rounded-lg text-slate-700 font-medium hover:bg-emerald-50 hover:text-emerald-600">📞 Contato & Dúvidas (FAQ)</button>
+        </div>
+    </header>
+
+    <!-- Toast Notification -->
+    <div id="toastNotification" class="fixed bottom-6 right-6 z-50 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none bg-slate-900 text-white px-5 py-3.5 rounded-2xl shadow-2xl flex items-center gap-3 border border-slate-700">
+        <div id="toastIcon" class="w-8 h-8 rounded-xl bg-emerald-500 text-white flex items-center justify-center flex-shrink-0">
+            <i class="fa-solid fa-check"></i>
+        </div>
+        <div>
+            <p id="toastTitle" class="text-xs font-semibold text-emerald-400 uppercase tracking-wider">Sucesso</p>
+            <p id="toastMessage" class="text-sm font-medium">Item adicionado com sucesso!</p>
+        </div>
+    </div>
+
+    <!-- Quick Cart Slide-over Drawer -->
+    <div id="quickCartOverlay" onclick="toggleQuickCart()" class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 hidden transition-opacity"></div>
+    <aside id="quickCartDrawer" class="fixed top-0 right-0 h-full w-full max-w-md bg-white z-50 shadow-2xl transform translate-x-full transition-transform duration-300 flex flex-col">
+        <div class="p-5 border-b border-slate-100 flex items-center justify-between bg-emerald-900 text-white">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-basket-shopping text-emerald-400 text-xl"></i>
+                <h3 class="font-bold text-lg">Sua Sacola do Bairro</h3>
+            </div>
+            <button onclick="toggleQuickCart()" class="text-slate-300 hover:text-white p-1 rounded-lg">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+        </div>
+
+        <div id="quickCartItems" class="flex-1 overflow-y-auto p-5 space-y-4 divide-y divide-slate-100">
+            <!-- Dynamic quick cart items generated by JS -->
+        </div>
+
+        <div class="p-5 border-t border-slate-200 bg-slate-50 space-y-4">
+            <div class="flex justify-between items-center text-slate-600 font-medium">
+                <span>Subtotal estimado:</span>
+                <span id="quickCartSubtotal" class="text-xl font-extrabold text-emerald-700">R$ 0,00</span>
+            </div>
+            <div class="grid grid-cols-2 gap-3">
+                <button onclick="toggleQuickCart()" class="w-full py-3 bg-slate-200 hover:bg-slate-300 text-slate-800 font-bold rounded-xl text-xs sm:text-sm transition">
+                    Continuar Comprando
+                </button>
+                <button onclick="toggleQuickCart(); navigateTo('cart');" class="w-full py-3 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl text-xs sm:text-sm shadow-md transition flex items-center justify-center gap-1.5">
+                    Ver Sacola Completa <i class="fa-solid fa-arrow-right text-xs"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN CONTENT SPA CONTAINER -->
+    <main id="mainApp" class="flex-1">
+
+        <!-- SECTION 1: HOME PAGE -->
+        <section id="page-home" class="page-fade space-y-12 pb-16">
+            
+            <!-- Hero Banner -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+                <div class="relative rounded-3xl overflow-hidden bg-gradient-to-r from-emerald-900 via-emerald-800 to-slate-900 text-white p-8 sm:p-12 lg:p-16 shadow-2xl flex flex-col lg:flex-row items-center justify-between gap-8">
+                    <div class="max-w-xl space-y-6 text-center lg:text-left z-10">
+                        <span class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 text-xs font-semibold uppercase tracking-wider">
+                            <i class="fa-solid fa-heart text-amber-400"></i> Há mais de 15 anos no seu bairro
+                        </span>
+                        <h1 class="text-3xl sm:text-5xl font-extrabold leading-tight tracking-tight">
+                            Produtos fresquinhos colhidos no dia <span class="text-amber-400 underline decoration-emerald-500 decoration-wavy">com carinho!</span>
+                        </h1>
+                        <p class="text-slate-300 text-sm sm:text-base leading-relaxed">
+                            Pães quentinhos a toda hora, frutas e verduras direto do produtor local, frios fatiados na hora e os melhores preços da vizinhança.
+                        </p>
+                        <div class="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
+                            <button onclick="navigateTo('catalog')" class="px-7 py-3.5 bg-amber-500 hover:bg-amber-600 text-slate-950 font-extrabold rounded-2xl shadow-lg hover:shadow-amber-500/30 transition transform hover:-translate-y-0.5 flex items-center gap-2">
+                                <i class="fa-solid fa-basket-shopping"></i> Ir Para As Compras
+                            </button>
+                            <button onclick="navigateTo('about')" class="px-6 py-3.5 bg-white/10 hover:bg-white/20 text-white font-semibold rounded-2xl border border-white/20 transition backdrop-blur-sm">
+                                Conhecer Nossa Loja
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Decorative Hero Image Stack -->
+                    <div class="relative w-full lg:w-1/2 flex justify-center">
+                        <div class="relative w-72 h-72 sm:w-96 sm:h-96 rounded-3xl overflow-hidden shadow-2xl border-4 border-white/10 transform rotate-2 hover:rotate-0 transition duration-500">
+                            <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=800&q=80" alt="Hortifrúti Fresco" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+                            <div class="absolute bottom-4 left-4 right-4 bg-white/90 backdrop-blur-md p-3.5 rounded-2xl text-slate-800 flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold text-lg">🥦</div>
+                                <div>
+                                    <p class="text-xs font-bold text-slate-900">Horta Orgânica do Bairro</p>
+                                    <p class="text-[11px] text-slate-600">Entregas diárias a partir das 06h</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features / Differentiators Bar -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4 hover:border-emerald-200 transition">
+                        <div class="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center text-xl flex-shrink-0">
+                            <i class="fa-solid fa-truck-fast"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-sm">Entrega em Rápida</h4>
+                            <p class="text-xs text-slate-500">Chega em até 45 minutos no seu portão</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4 hover:border-emerald-200 transition">
+                        <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center text-xl flex-shrink-0">
+                            <i class="fa-solid fa-seedling"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-sm">100% Fresquinho</h4>
+                            <p class="text-xs text-slate-500">Hortifrúti selecionado item a item</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4 hover:border-emerald-200 transition">
+                        <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center text-xl flex-shrink-0">
+                            <i class="fa-solid fa-credit-card"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-sm">Aceitamos Vales</h4>
+                            <p class="text-xs text-slate-500">Alelo, Sodexo, VR, Ticket e Pix</p>
+                        </div>
+                    </div>
+                    <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex items-center gap-4 hover:border-emerald-200 transition">
+                        <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center text-xl flex-shrink-0">
+                            <i class="fa-solid fa-handshake-angle"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-bold text-slate-800 text-sm">Atendimento Amigo</h4>
+                            <p class="text-xs text-slate-500">O carinho de vizinho que você conhece</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Featured Categories -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Departamentos Populares</h2>
+                        <p class="text-xs sm:text-sm text-slate-500">Explore pelos setores favoritos da vizinhança</p>
+                    </div>
+                    <button onclick="navigateTo('catalog')" class="text-emerald-700 font-bold text-sm hover:underline flex items-center gap-1">
+                        Ver Todos <i class="fa-solid fa-chevron-right text-xs"></i>
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4">
+                    <button onclick="filterByCategory('horta')" class="bg-white p-4 rounded-2xl border border-slate-100 hover:border-emerald-500 hover:shadow-md transition text-center group">
+                        <div class="w-14 h-14 mx-auto rounded-2xl bg-emerald-50 group-hover:bg-emerald-600 text-emerald-600 group-hover:text-white flex items-center justify-center text-2xl transition mb-3">🍌</div>
+                        <h3 class="font-bold text-slate-800 text-xs sm:text-sm">Horta & Frutas</h3>
+                    </button>
+                    <button onclick="filterByCategory('padaria')" class="bg-white p-4 rounded-2xl border border-slate-100 hover:border-emerald-500 hover:shadow-md transition text-center group">
+                        <div class="w-14 h-14 mx-auto rounded-2xl bg-amber-50 group-hover:bg-amber-600 text-amber-600 group-hover:text-white flex items-center justify-center text-2xl transition mb-3">🥖</div>
+                        <h3 class="font-bold text-slate-800 text-xs sm:text-sm">Padaria Fresca</h3>
+                    </button>
+                    <button onclick="filterByCategory('frios')" class="bg-white p-4 rounded-2xl border border-slate-100 hover:border-emerald-500 hover:shadow-md transition text-center group">
+                        <div class="w-14 h-14 mx-auto rounded-2xl bg-orange-50 group-hover:bg-orange-600 text-orange-600 group-hover:text-white flex items-center justify-center text-2xl transition mb-3">🧀</div>
+                        <h3 class="font-bold text-slate-800 text-xs sm:text-sm">Frios & Laticínios</h3>
+                    </button>
+                    <button onclick="filterByCategory('bebidas')" class="bg-white p-4 rounded-2xl border border-slate-100 hover:border-emerald-500 hover:shadow-md transition text-center group">
+                        <div class="w-14 h-14 mx-auto rounded-2xl bg-blue-50 group-hover:bg-blue-600 text-blue-600 group-hover:text-white flex items-center justify-center text-2xl transition mb-3">🥤</div>
+                        <h3 class="font-bold text-slate-800 text-xs sm:text-sm">Bebidas Geladas</h3>
+                    </button>
+                    <button onclick="filterByCategory('limpeza')" class="bg-white p-4 rounded-2xl border border-slate-100 hover:border-emerald-500 hover:shadow-md transition text-center group">
+                        <div class="w-14 h-14 mx-auto rounded-2xl bg-purple-50 group-hover:bg-purple-600 text-purple-600 group-hover:text-white flex items-center justify-center text-2xl transition mb-3">🧼</div>
+                        <h3 class="font-bold text-slate-800 text-xs sm:text-sm">Limpeza Casa</h3>
+                    </button>
+                    <button onclick="filterByCategory('mercearia')" class="bg-white p-4 rounded-2xl border border-slate-100 hover:border-emerald-500 hover:shadow-md transition text-center group">
+                        <div class="w-14 h-14 mx-auto rounded-2xl bg-red-50 group-hover:bg-red-600 text-red-600 group-hover:text-white flex items-center justify-center text-2xl transition mb-3">📦</div>
+                        <h3 class="font-bold text-slate-800 text-xs sm:text-sm">Mercearia Geral</h3>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Offer of the Day Highlight Banner -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="bg-gradient-to-r from-amber-500 via-amber-600 to-orange-600 rounded-3xl p-6 sm:p-8 text-white flex flex-col md:flex-row items-center justify-between gap-6 shadow-xl">
+                    <div class="space-y-2 text-center md:text-left">
+                        <span class="bg-white text-amber-800 font-extrabold text-xs px-3 py-1 rounded-full uppercase tracking-wider inline-block">⚡ Imperdível Hoje</span>
+                        <h3 class="text-2xl sm:text-3xl font-extrabold">Pão Francês Crocante Quentinho</h3>
+                        <p class="text-amber-100 text-sm max-w-md">Saídas diretas do forno às 07h, 11h30 e 17h00. Garanta o seu para o café da tarde com queijo Minas fatiado!</p>
+                    </div>
+                    <div class="flex items-center gap-4 bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20">
+                        <div class="text-center">
+                            <span class="block text-2xl font-black">R$ 13,90</span>
+                            <span class="text-xs text-amber-200">o Kilo</span>
+                        </div>
+                        <button onclick="quickAddToCart(3)" class="px-5 py-3 bg-white hover:bg-amber-50 text-slate-900 font-extrabold rounded-xl shadow transition text-sm">
+                            <i class="fa-solid fa-plus text-emerald-600 mr-1"></i> Puxar 1kg
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Home Product Showcase Grid -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="flex items-center justify-between mb-6">
+                    <div>
+                        <h2 class="text-2xl font-extrabold text-slate-900 tracking-tight">Vitrine Semanal do Bairro</h2>
+                        <p class="text-xs sm:text-sm text-slate-500">Os itens mais comprados pelas famílias da região</p>
+                    </div>
+                    <button onclick="navigateTo('catalog')" class="text-emerald-700 font-bold text-sm hover:underline">
+                        Ver Mais Produtos →
+                    </button>
+                </div>
+
+                <div id="homeProductsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <!-- Javascript will inject initial cards here -->
+                </div>
+            </div>
+
+        </section>
+
+        <!-- SECTION 2: CATALOG PAGE -->
+        <section id="page-catalog" class="page-fade space-y-8 pb-16 hidden">
+            
+            <!-- Breadcrumbs & Header -->
+            <div class="bg-emerald-900 text-white py-10 px-4 sm:px-6 lg:px-8">
+                <div class="max-w-7xl mx-auto space-y-2">
+                    <p class="text-xs text-emerald-300 font-medium">
+                        <a href="#home" onclick="navigateTo('home')" class="hover:underline">Início</a> / <span class="text-white">Catálogo Completo</span>
+                    </p>
+                    <h1 class="text-3xl font-extrabold">Catálogo de Produtos da Mercearia</h1>
+                    <p class="text-emerald-200 text-sm">Navegue pelos nossos departamentos com mais de 12 itens fundamentais para sua dispensa.</p>
+                </div>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <!-- Search & Filters Toolbar -->
+                <div class="bg-white p-4 sm:p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4 mb-8">
+                    
+                    <div class="flex flex-col md:flex-row gap-4 justify-between items-center">
+                        <!-- Search Box -->
+                        <div class="relative w-full md:w-96">
+                            <input type="text" id="catalogSearchInput" onkeyup="renderCatalog()" placeholder="Filtrar por nome do produto..." 
+                                class="w-full pl-10 pr-4 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition">
+                            <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-3.5 text-slate-400"></i>
+                        </div>
+
+                        <!-- Sorting Dropdown -->
+                        <div class="flex items-center gap-3 w-full md:w-auto justify-end">
+                            <label for="catalogSort" class="text-xs font-bold text-slate-600 whitespace-nowrap">Ordenar por:</label>
+                            <select id="catalogSort" onchange="renderCatalog()" class="bg-slate-50 border border-slate-200 text-slate-800 text-sm rounded-xl py-2 px-3 focus:border-emerald-500 outline-none">
+                                <option value="default">Destaques da Semana</option>
+                                <option value="price-low">Menor Preço</option>
+                                <option value="price-high">Maior Preço</option>
+                                <option value="popular">Mais Vendidos</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Department Category Filter Pills -->
+                    <div class="flex items-center gap-2 overflow-x-auto pb-2 pt-2 hide-scrollbar text-xs sm:text-sm font-semibold">
+                        <button onclick="setCategoryFilter('all')" id="cat-btn-all" class="cat-filter-btn px-4 py-2 rounded-xl border border-emerald-600 bg-emerald-600 text-white transition whitespace-nowrap">
+                            Todos os Itens
+                        </button>
+                        <button onclick="setCategoryFilter('horta')" id="cat-btn-horta" class="cat-filter-btn px-4 py-2 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition whitespace-nowrap">
+                            🥬 Horta & Frutas
+                        </button>
+                        <button onclick="setCategoryFilter('padaria')" id="cat-btn-padaria" class="cat-filter-btn px-4 py-2 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition whitespace-nowrap">
+                            🥖 Padaria
+                        </button>
+                        <button onclick="setCategoryFilter('frios')" id="cat-btn-frios" class="cat-filter-btn px-4 py-2 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition whitespace-nowrap">
+                            🧀 Frios & Laticínios
+                        </button>
+                        <button onclick="setCategoryFilter('bebidas')" id="cat-btn-bebidas" class="cat-filter-btn px-4 py-2 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition whitespace-nowrap">
+                            🥤 Bebidas
+                        </button>
+                        <button onclick="setCategoryFilter('limpeza')" id="cat-btn-limpeza" class="cat-filter-btn px-4 py-2 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition whitespace-nowrap">
+                            🧼 Limpeza
+                        </button>
+                        <button onclick="setCategoryFilter('mercearia')" id="cat-btn-mercearia" class="cat-filter-btn px-4 py-2 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition whitespace-nowrap">
+                            📦 Mercearia Geral
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- Catalog Grid -->
+                <div id="catalogProductsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                    <!-- Dynamic rendering of 12+ products -->
+                </div>
+
+                <!-- Empty State Message -->
+                <div id="catalogEmptyState" class="hidden text-center py-16 bg-white rounded-3xl border border-slate-200">
+                    <i class="fa-solid fa-basket-shopping text-5xl text-slate-300 mb-3 block"></i>
+                    <h3 class="text-lg font-bold text-slate-800">Nenhum produto encontrado</h3>
+                    <p class="text-sm text-slate-500 mb-4">Tente buscar por outro termo ou selecione outro departamento.</p>
+                    <button onclick="resetFilters()" class="px-5 py-2.5 bg-emerald-600 text-white font-bold text-sm rounded-xl hover:bg-emerald-700 transition">
+                        Limpar Filtros
+                    </button>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- SECTION 3: PRODUCT DETAIL PAGE -->
+        <section id="page-product-detail" class="page-fade space-y-8 pb-16 hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6">
+                <!-- Breadcrumb -->
+                <div class="text-xs sm:text-sm text-slate-500 mb-6 flex items-center gap-2">
+                    <button onclick="navigateTo('home')" class="hover:underline text-emerald-700">Início</button>
+                    <span>/</span>
+                    <button onclick="navigateTo('catalog')" class="hover:underline text-emerald-700">Catálogo</button>
+                    <span>/</span>
+                    <span id="detailBreadcrumbName" class="font-semibold text-slate-800">Detalhes do Produto</span>
+                </div>
+
+                <!-- Detail Card Container -->
+                <div id="productDetailContent" class="bg-white rounded-3xl border border-slate-200 shadow-lg p-6 sm:p-10">
+                    <!-- JS injects product details -->
+                </div>
+
+                <!-- Related Products Section -->
+                <div class="mt-12 space-y-6">
+                    <h3 class="text-xl font-extrabold text-slate-900">Você Também Pode Precisar</h3>
+                    <div id="relatedProductsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <!-- JS injects related products -->
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SECTION 4: CART PAGE -->
+        <section id="page-cart" class="page-fade space-y-8 pb-16 hidden">
+            
+            <div class="bg-emerald-900 text-white py-10 px-4 sm:px-6 lg:px-8">
+                <div class="max-w-7xl mx-auto">
+                    <h1 class="text-3xl font-extrabold">Minha Sacola de Compras</h1>
+                    <p class="text-emerald-200 text-sm">Confira os produtos selecionados antes do fechamento do pedido.</p>
+                </div>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    
+                    <!-- Cart Items List (Left Column) -->
+                    <div class="lg:col-span-2 space-y-4">
+                        <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm">
+                            <div class="flex justify-between items-center border-b border-slate-100 pb-4 mb-4">
+                                <h3 class="font-bold text-slate-800 text-lg">Itens Selecionados (<span id="cartTotalItemsCount">0</span>)</h3>
+                                <button onclick="clearCart()" class="text-xs font-semibold text-red-600 hover:text-red-700 flex items-center gap-1">
+                                    <i class="fa-solid fa-trash"></i> Esvaziar Sacola
+                                </button>
+                            </div>
+
+                            <div id="fullCartItemsContainer" class="divide-y divide-slate-100">
+                                <!-- JS inserts cart items -->
+                            </div>
+
+                            <div id="fullCartEmptyMessage" class="hidden text-center py-12 space-y-4">
+                                <div class="w-16 h-16 bg-emerald-50 text-emerald-600 rounded-full flex items-center justify-center text-3xl mx-auto">
+                                    <i class="fa-solid fa-basket-shopping"></i>
+                                </div>
+                                <h4 class="font-bold text-slate-800 text-lg">Sua sacola está vazia!</h4>
+                                <p class="text-slate-500 text-sm max-w-sm mx-auto">Navegue pela nossa horta e gôndolas virtuais e escolha seus produtos fresquinhos do dia.</p>
+                                <button onclick="navigateTo('catalog')" class="px-6 py-3 bg-emerald-600 text-white font-bold rounded-xl shadow hover:bg-emerald-700 transition text-sm">
+                                    Ir Para o Catálogo
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Order Summary & Note (Right Column) -->
+                    <div class="space-y-6">
+                        <!-- Summary Box -->
+                        <div class="bg-white rounded-3xl border border-slate-200 p-6 shadow-sm space-y-5">
+                            <h3 class="font-bold text-slate-900 text-lg border-b border-slate-100 pb-3">Resumo do Pedido</h3>
+
+                            <!-- Coupon Code Input -->
+                            <div class="space-y-2">
+                                <label class="text-xs font-bold text-slate-600 uppercase tracking-wider block">Possui Cupom do Bairro?</label>
+                                <div class="flex gap-2">
+                                    <input type="text" id="couponInput" placeholder="Ex: PRIMEIRACOMPRA" class="uppercase w-full px-3 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold outline-none focus:border-emerald-500">
+                                    <button onclick="applyCoupon()" class="px-4 py-2 bg-slate-800 text-white rounded-xl text-xs font-bold hover:bg-slate-900 transition">
+                                        Aplicar
+                                    </button>
+                                </div>
+                                <p id="couponMsg" class="text-xs font-medium text-emerald-600 hidden">✓ Cupom 'PRIMEIRACOMPRA' aplicado (10% OFF)!</p>
+                            </div>
+
+                            <div class="space-y-2 text-sm text-slate-600 pt-2 border-t border-slate-100">
+                                <div class="flex justify-between">
+                                    <span>Subtotal dos Produtos:</span>
+                                    <span id="cartSubtotalText" class="font-semibold text-slate-800">R$ 0,00</span>
+                                </div>
+                                <div class="flex justify-between">
+                                    <span>Entrega Estimada (Bairro):</span>
+                                    <span id="cartShippingText" class="font-semibold text-emerald-600">R$ 5,00</span>
+                                </div>
+                                <div id="cartDiscountRow" class="flex justify-between text-amber-600 font-semibold hidden">
+                                    <span>Desconto (Cupom 10%):</span>
+                                    <span id="cartDiscountText">- R$ 0,00</span>
+                                </div>
+                            </div>
+
+                            <div class="pt-4 border-t border-slate-200 flex justify-between items-center">
+                                <span class="font-extrabold text-slate-900 text-base">Total Geral:</span>
+                                <span id="cartTotalText" class="text-2xl font-black text-emerald-700">R$ 0,00</span>
+                            </div>
+
+                            <!-- Omitted WhatsApp Checkout Explanation Box -->
+                            <div class="p-4 bg-amber-50 border border-amber-200 rounded-2xl text-amber-900 space-y-2 text-xs">
+                                <div class="flex items-center gap-2 font-bold text-amber-800">
+                                    <i class="fa-solid fa-circle-info text-amber-600 text-base"></i>
+                                    <span>Nota do Sistema</span>
+                                </div>
+                                <p class="leading-relaxed">
+                                    Conforme solicitado nos requisitos deste projeto, o botão e fluxo final de <strong>Checkout via WhatsApp</strong> foi omitido nesta versão de demonstração da aplicação.
+                                </p>
+                            </div>
+
+                            <button onclick="navigateTo('catalog')" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-2xl transition shadow flex items-center justify-center gap-2 text-sm">
+                                <i class="fa-solid fa-arrow-left text-xs"></i> Continuar Escolhendo Produtos
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- SECTION 5: ABOUT PAGE -->
+        <section id="page-about" class="page-fade space-y-12 pb-16 hidden">
+            
+            <div class="bg-emerald-900 text-white py-12 px-4 sm:px-6 lg:px-8 text-center relative overflow-hidden">
+                <div class="max-w-3xl mx-auto space-y-3 z-10 relative">
+                    <span class="bg-amber-500 text-slate-950 text-xs font-black uppercase px-3 py-1 rounded-full tracking-wider">Tradição & Família</span>
+                    <h1 class="text-3xl sm:text-5xl font-extrabold">Nossa História no Bairro</h1>
+                    <p class="text-emerald-100 text-sm sm:text-base leading-relaxed">
+                        Há mais de 15 anos alimentando famílias com acolhimento, produtos frescos e sorriso no rosto.
+                    </p>
+                </div>
+            </div>
+
+            <!-- History Story Content -->
+            <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="bg-white rounded-3xl border border-slate-200 p-8 sm:p-12 shadow-sm grid grid-cols-1 md:grid-cols-2 gap-10 items-center">
+                    <div class="space-y-4 text-slate-700 leading-relaxed text-sm sm:text-base">
+                        <span class="text-emerald-700 font-bold text-xs uppercase tracking-wider block">Fundada em 2011</span>
+                        <h2 class="text-2xl font-extrabold text-slate-900">De uma pequena gôndola de pão para o coração da vizinhança</h2>
+                        <p>
+                            A **Mercearia Cantinho do Bairro** nasceu do sonho de Seu Antônio e Dona Maria de criar um ponto de encontro acolhedor onde qualquer vizinho pudesse encontrar o pão francês quentinho de manhã cedo e verduras recém-colhidas por agricultores locais da nossa região.
+                        </p>
+                        <p>
+                            Mesmo crescendo ao longo de mais de uma década, mantivemos intacta nossa essência: chamar o cliente pelo nome, indicar a fruta mais madura e garantir produtos da mais alta qualidade para a mesa da sua família.
+                        </p>
+                    </div>
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1578916171728-46686eac8d58?auto=format&fit=crop&w=800&q=80" alt="Fachada Aconchegante" class="rounded-3xl shadow-lg border-4 border-emerald-100 w-full object-cover h-80">
+                        <div class="absolute -bottom-4 -left-4 bg-amber-500 text-slate-950 font-black p-4 rounded-2xl shadow-lg text-center">
+                            <span class="block text-2xl">15+</span>
+                            <span class="text-[10px] uppercase tracking-wider">Anos de Atendimento</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Values Cards -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center max-w-xl mx-auto mb-8">
+                    <h2 class="text-2xl font-extrabold text-slate-900">O Que nos Move Todos os Dias</h2>
+                    <p class="text-slate-500 text-sm">Nossos compromissos invioláveis com a vizinhança</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="bg-emerald-50 border border-emerald-100 rounded-3xl p-6 space-y-3">
+                        <div class="w-12 h-12 bg-emerald-600 text-white rounded-2xl flex items-center justify-center text-xl font-bold">🌾</div>
+                        <h3 class="font-bold text-slate-900 text-lg">Apoio a Pequenos Produtores</h3>
+                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                            Mais de 70% dos nossos hortifrútis vêm diretamente de produtores familiares situados em um raio de 30km da cidade.
+                        </p>
+                    </div>
+
+                    <div class="bg-amber-50 border border-amber-100 rounded-3xl p-6 space-y-3">
+                        <div class="w-12 h-12 bg-amber-500 text-slate-950 rounded-2xl flex items-center justify-center text-xl font-bold">🍎</div>
+                        <h3 class="font-bold text-slate-900 text-lg">Seleção Rigorosa do Dia</h3>
+                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                            Nossa equipe inspeciona manualmente cada caixa de frutas e legumes logo na entrega da madrugada para garantir textura e sabor insuperáveis.
+                        </p>
+                    </div>
+
+                    <div class="bg-blue-50 border border-blue-100 rounded-3xl p-6 space-y-3">
+                        <div class="w-12 h-12 bg-blue-600 text-white rounded-2xl flex items-center justify-center text-xl font-bold">🤝</div>
+                        <h3 class="font-bold text-slate-900 text-lg">Atendimento Humanizado</h3>
+                        <p class="text-slate-600 text-xs sm:text-sm leading-relaxed">
+                            Aqui você não é apenas um número no caixa. Entendemos suas preferências e fazemos questão de ajudar no que for preciso.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Photos Gallery -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <h3 class="text-xl font-extrabold text-slate-900 mb-6">Galeria do Nosso Espaço</h3>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <div class="h-48 rounded-2xl overflow-hidden shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=500&q=80" alt="Padaria" class="w-full h-full object-cover hover:scale-110 transition duration-500">
+                    </div>
+                    <div class="h-48 rounded-2xl overflow-hidden shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1610832958506-aa56368176cf?auto=format&fit=crop&w=500&q=80" alt="Frutas" class="w-full h-full object-cover hover:scale-110 transition duration-500">
+                    </div>
+                    <div class="h-48 rounded-2xl overflow-hidden shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1488459716781-31db52582fe9?auto=format&fit=crop&w=500&q=80" alt="Gôndolas" class="w-full h-full object-cover hover:scale-110 transition duration-500">
+                    </div>
+                    <div class="h-48 rounded-2xl overflow-hidden shadow-sm">
+                        <img src="https://images.unsplash.com/photo-1588964895597-cfccd6e2dbf9?auto=format&fit=crop&w=500&q=80" alt="Frios" class="w-full h-full object-cover hover:scale-110 transition duration-500">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Neighbor Testimonials -->
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="bg-white rounded-3xl border border-slate-200 p-8 shadow-sm">
+                    <h3 class="text-xl font-extrabold text-slate-900 text-center mb-6">O Que Dizem Nossos Vizinhos</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-3">
+                            <div class="text-amber-400 text-sm">★★★★★</div>
+                            <p class="text-xs text-slate-600 italic">"Compro o pão quentinho da tarde todos os dias há mais de 8 anos. O atendimento do Seu Antônio não tem preço!"</p>
+                            <p class="text-xs font-bold text-slate-800">— Dona Clara M., Moradora da Rua das Flores</p>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-3">
+                            <div class="text-amber-400 text-sm">★★★★★</div>
+                            <p class="text-xs text-slate-600 italic">"A entrega das frutas e banana prata aqui em casa chega impecável em menos de 30 minutos. Salva meu café!"</p>
+                            <p class="text-xs font-bold text-slate-800">— Roberto S., Cliente Frequente</p>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 space-y-3">
+                            <div class="text-amber-400 text-sm">★★★★★</div>
+                            <p class="text-xs text-slate-600 italic">"Adoro que eles aceitam meu cartão de vale refeição e o queijo Minas fresco tem o exato gosto de roça."</p>
+                            <p class="text-xs font-bold text-slate-800">— Mariana Costa, Vizinha do Bloco B</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- SECTION 6: CONTACT & FAQ PAGE -->
+        <section id="page-contact" class="page-fade space-y-12 pb-16 hidden">
+            
+            <div class="bg-emerald-900 text-white py-12 px-4 sm:px-6 lg:px-8 text-center">
+                <div class="max-w-3xl mx-auto space-y-3">
+                    <h1 class="text-3xl sm:text-4xl font-extrabold">Central de Atendimento & Dúvidas</h1>
+                    <p class="text-emerald-200 text-sm">Fale com nossa equipe ou tire suas dúvidas frequentes em instantes.</p>
+                </div>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                    
+                    <!-- Contact Form Column -->
+                    <div class="bg-white rounded-3xl border border-slate-200 p-6 sm:p-8 shadow-sm space-y-6">
+                        <div>
+                            <h3 class="text-xl font-extrabold text-slate-900">Envie uma Mensagem</h3>
+                            <p class="text-xs text-slate-500">Respondemos em até 2 horas durante nosso horário comercial.</p>
+                        </div>
+
+                        <form id="contactForm" onsubmit="handleContactSubmit(event)" class="space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div class="space-y-1">
+                                    <label class="text-xs font-bold text-slate-700">Seu Nome *</label>
+                                    <input type="text" required placeholder="Ex: João da Silva" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:border-emerald-500 outline-none">
+                                </div>
+                                <div class="space-y-1">
+                                    <label class="text-xs font-bold text-slate-700">Seu WhatsApp / Telefone *</label>
+                                    <input type="tel" required placeholder="(44) 99999-0000" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:border-emerald-500 outline-none">
+                                </div>
+                            </div>
+
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold text-slate-700">E-mail *</label>
+                                <input type="email" required placeholder="seuemail@exemplo.com" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:border-emerald-500 outline-none">
+                            </div>
+
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold text-slate-700">Assunto</label>
+                                <select class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:border-emerald-500 outline-none">
+                                    <option>Dúvida sobre Entregas</option>
+                                    <option>Encomenda Especial de Padaria</option>
+                                    <option>Sugestão de Produto</option>
+                                    <option>Elogio ou Reclamação</option>
+                                </select>
+                            </div>
+
+                            <div class="space-y-1">
+                                <label class="text-xs font-bold text-slate-700">Sua Mensagem *</label>
+                                <textarea required rows="4" placeholder="Como podemos te ajudar hoje?" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:border-emerald-500 outline-none"></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-xl shadow transition text-sm flex items-center justify-center gap-2">
+                                <i class="fa-solid fa-paper-plane"></i> Enviar Mensagem para o Cantinho
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Store Contact Cards & Map -->
+                    <div class="space-y-6">
+                        
+                        <!-- Contact Info Cards Grid -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                                <div class="w-9 h-9 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center font-bold">
+                                    <i class="fa-solid fa-location-dot"></i>
+                                </div>
+                                <h4 class="font-bold text-slate-800 text-sm">Endereço Físico</h4>
+                                <p class="text-xs text-slate-600 leading-snug">Rua das Acácias, nº 482 - Bairro Jardim Central, Maringá - PR</p>
+                            </div>
+
+                            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                                <div class="w-9 h-9 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center font-bold">
+                                    <i class="fa-solid fa-clock"></i>
+                                </div>
+                                <h4 class="font-bold text-slate-800 text-sm">Horário de Funcionamento</h4>
+                                <p class="text-xs text-slate-600 leading-snug">
+                                    <strong>Seg a Sáb:</strong> 07:00h às 20:00h<br>
+                                    <strong>Domingos e Feriados:</strong> 07:00h às 13:00h
+                                </p>
+                            </div>
+
+                            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                                <div class="w-9 h-9 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center font-bold">
+                                    <i class="fa-brands fa-whatsapp"></i>
+                                </div>
+                                <h4 class="font-bold text-slate-800 text-sm">WhatsApp de Atendimento</h4>
+                                <p class="text-xs text-slate-600 leading-snug">(44) 99888-7766</p>
+                            </div>
+
+                            <div class="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-2">
+                                <div class="w-9 h-9 bg-emerald-100 text-emerald-700 rounded-xl flex items-center justify-center font-bold">
+                                    <i class="fa-solid fa-phone"></i>
+                                </div>
+                                <h4 class="font-bold text-slate-800 text-sm">Telefone Fixo da Loja</h4>
+                                <p class="text-xs text-slate-600 leading-snug">(44) 3222-8900</p>
+                            </div>
+                        </div>
+
+                        <!-- Stylized Map Container -->
+                        <div class="bg-white rounded-3xl border border-slate-200 p-4 shadow-sm space-y-3">
+                            <div class="flex items-center justify-between text-xs font-bold text-slate-700">
+                                <span>📍 Localização da Mercearia</span>
+                                <span class="text-emerald-600">Área de Cobertura Raio 5km</span>
+                            </div>
+                            <div class="relative w-full h-48 bg-slate-200 rounded-2xl overflow-hidden flex items-center justify-center border border-slate-300">
+                                <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?auto=format&fit=crop&w=800&q=80" alt="Mapa" class="w-full h-full object-cover opacity-80">
+                                <div class="absolute bg-emerald-600 text-white font-bold text-xs px-3 py-1.5 rounded-full shadow-lg flex items-center gap-2 border border-white">
+                                    <i class="fa-solid fa-basket-shopping text-amber-400"></i> Cantinho do Bairro
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <!-- Interactive Accordion FAQ Section -->
+                <div class="mt-16 space-y-6">
+                    <div class="text-center max-w-xl mx-auto">
+                        <h2 class="text-2xl font-extrabold text-slate-900">Dúvidas Frequentes (FAQ)</h2>
+                        <p class="text-xs sm:text-sm text-slate-500">Respostas rápidas para as perguntas mais comuns dos nossos vizinhos</p>
+                    </div>
+
+                    <div class="max-w-3xl mx-auto space-y-3">
+                        
+                        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                            <button onclick="toggleFaq(1)" class="w-full p-5 text-left font-bold text-slate-800 text-sm sm:text-base flex justify-between items-center hover:bg-slate-50">
+                                <span>1. Qual é o raio de entrega e qual o tempo médio para chegar?</span>
+                                <i id="faq-icon-1" class="fa-solid fa-chevron-down text-emerald-600 transition-transform"></i>
+                            </button>
+                            <div id="faq-content-1" class="hidden p-5 pt-0 text-xs sm:text-sm text-slate-600 border-t border-slate-100 leading-relaxed bg-slate-50/50">
+                                Entregamos em um raio de até 5km da nossa mercearia física. Para bairros vizinhos, o tempo médio de entrega é de 30 a 45 minutos após a confirmação do pedido.
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                            <button onclick="toggleFaq(2)" class="w-full p-5 text-left font-bold text-slate-800 text-sm sm:text-base flex justify-between items-center hover:bg-slate-50">
+                                <span>2. Vocês aceitam cartões de Vale Alimentação e Vale Refeição?</span>
+                                <i id="faq-icon-2" class="fa-solid fa-chevron-down text-emerald-600 transition-transform"></i>
+                            </button>
+                            <div id="faq-content-2" class="hidden p-5 pt-0 text-xs sm:text-sm text-slate-600 border-t border-slate-100 leading-relaxed bg-slate-50/50">
+                                Sim! Aceitamos as principais bandeiras de Vales: Alelo Alimentação, Sodexo, VR Benefícios, Ticket Restaurante e Pluxee, tanto na maquininha entregue pelo nosso entregador quanto na loja física.
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                            <button onclick="toggleFaq(3)" class="w-full p-5 text-left font-bold text-slate-800 text-sm sm:text-base flex justify-between items-center hover:bg-slate-50">
+                                <span>3. Como funciona a política de troca para frutas ou legumes frescos?</span>
+                                <i id="faq-icon-3" class="fa-solid fa-chevron-down text-emerald-600 transition-transform"></i>
+                            </button>
+                            <div id="faq-content-3" class="hidden p-5 pt-0 text-xs sm:text-sm text-slate-600 border-t border-slate-100 leading-relaxed bg-slate-50/50">
+                                Garantia total de qualidade! Se você receber algum hortifrúti com qualquer imperfeição ou fora do ponto desejado, efetuamos a troca imediata no mesmo dia ou devolvemos o valor do item sem complicações.
+                            </div>
+                        </div>
+
+                        <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                            <button onclick="toggleFaq(4)" class="w-full p-5 text-left font-bold text-slate-800 text-sm sm:text-base flex justify-between items-center hover:bg-slate-50">
+                                <span>4. É possível pagar diretamente ao entregador na hora da entrega?</span>
+                                <i id="faq-icon-4" class="fa-solid fa-chevron-down text-emerald-600 transition-transform"></i>
+                            </button>
+                            <div id="faq-content-4" class="hidden p-5 pt-0 text-xs sm:text-sm text-slate-600 border-t border-slate-100 leading-relaxed bg-slate-50/50">
+                                Perfeitamente. Nossos entregadores levam a maquininha de cartão (débito, crédito e vales) e também troco para pagamentos em dinheiro vivo ou QR Code Pix.
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- FOOTER COMPONENT -->
+    <footer class="bg-slate-900 text-slate-300 border-t border-slate-800 pt-12 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                
+                <!-- Col 1: Brand Info -->
+                <div class="space-y-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-10 h-10 rounded-xl bg-emerald-600 text-white flex items-center justify-center text-xl font-bold">
+                            <i class="fa-solid fa-basket-shopping"></i>
+                        </div>
+                        <span class="text-xl font-extrabold text-white tracking-tight">Cantinho<span class="text-emerald-500">.</span></span>
+                    </div>
+                    <p class="text-xs text-slate-400 leading-relaxed">
+                        Sua mercearia de confiança no bairro. Do pão quentinho ao produto de limpeza, tudo perto de você.
+                    </p>
+                    <div class="flex items-center gap-3 text-slate-400">
+                        <a href="#" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition"><i class="fa-brands fa-instagram text-sm"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition"><i class="fa-brands fa-facebook-f text-sm"></i></a>
+                        <a href="#" class="w-8 h-8 rounded-lg bg-slate-800 hover:bg-emerald-600 hover:text-white flex items-center justify-center transition"><i class="fa-brands fa-whatsapp text-sm"></i></a>
+                    </div>
+                </div>
+
+                <!-- Col 2: Navigation Shortcuts -->
+                <div class="space-y-3">
+                    <h4 class="text-white font-bold text-sm">Navegação Rápida</h4>
+                    <ul class="space-y-2 text-xs">
+                        <li><a href="#home" onclick="navigateTo('home')" class="hover:text-emerald-400 transition">Página Inicial</a></li>
+                        <li><a href="#catalog" onclick="navigateTo('catalog')" class="hover:text-emerald-400 transition">Catálogo de Produtos</a></li>
+                        <li><a href="#about" onclick="navigateTo('about')" class="hover:text-emerald-400 transition">Sobre a Mercearia</a></li>
+                        <li><a href="#contact" onclick="navigateTo('contact')" class="hover:text-emerald-400 transition">Central de Contato & FAQ</a></li>
+                        <li><a href="#cart" onclick="navigateTo('cart')" class="hover:text-emerald-400 transition">Minha Sacola</a></li>
+                    </ul>
+                </div>
+
+                <!-- Col 3: Hours & Service -->
+                <div class="space-y-3 text-xs">
+                    <h4 class="text-white font-bold text-sm">Atendimento Presencial</h4>
+                    <p class="text-slate-400">📍 Rua das Acácias, nº 482 - Jardim Central</p>
+                    <p class="text-slate-400">⏰ Seg a Sáb: 07h às 20h</p>
+                    <p class="text-slate-400">⏰ Dom: 07h às 13h</p>
+                    <p class="text-emerald-400 font-semibold">☎️ (44) 3222-8900</p>
+                </div>
+
+                <!-- Col 4: Payment Badges -->
+                <div class="space-y-3">
+                    <h4 class="text-white font-bold text-sm">Formas de Pagamento</h4>
+                    <p class="text-xs text-slate-400">Aceitamos no caixa e na entrega:</p>
+                    <div class="flex flex-wrap gap-2 text-xs font-semibold">
+                        <span class="bg-slate-800 text-slate-300 px-2.5 py-1 rounded-md border border-slate-700">💳 Pix</span>
+                        <span class="bg-slate-800 text-slate-300 px-2.5 py-1 rounded-md border border-slate-700">Alelo</span>
+                        <span class="bg-slate-800 text-slate-300 px-2.5 py-1 rounded-md border border-slate-700">Sodexo</span>
+                        <span class="bg-slate-800 text-slate-300 px-2.5 py-1 rounded-md border border-slate-700">VR</span>
+                        <span class="bg-slate-800 text-slate-300 px-2.5 py-1 rounded-md border border-slate-700">Débito/Crédito</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="pt-6 border-t border-slate-800 text-center text-xs text-slate-500 flex flex-col sm:flex-row justify-between items-center gap-4">
+                <p>© 2026 Mercearia Cantinho do Bairro. Todos os direitos reservados.</p>
+                <p>Desenvolvido com carinho para a vizinhança ❤️</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const PRODUCTS = [
+            {
+                id: 1,
+                name: "Banana Prata da Horta",
+                category: "horta",
+                categoryLabel: "Horta & Frutas",
+                price: 7.90,
+                unit: "kg",
+                image: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?auto=format&fit=crop&w=600&q=80",
+                badge: "Fresquinho",
+                rating: 4.9,
+                reviewsCount: 38,
+                description: "Bananas prata selecionadas e colhidas no ponto ideal para consumo diário. Ricas em potássio e vitaminas.",
+                origin: "Sítio Vista Alegre (Produtor Local a 18km)",
+                storageTip: "Manter em local fresco e arejado fora de sacos plásticos.",
+                nutrition: "Calories: 89kcal/100g | Carboidratos: 22g | Proteínas: 1.1g"
+            },
+            {
+                id: 2,
+                name: "Papel Higiênico Folha Dupla (12un)",
+                category: "limpeza",
+                categoryLabel: "Limpeza & Higiene",
+                price: 18.90,
+                unit: "pct",
+                image: "https://images.unsplash.com/photo-1584556812952-905ffd0c611a?auto=format&fit=crop&w=600&q=80",
+                badge: "Oferta",
+                rating: 4.7,
+                reviewsCount: 24,
+                description: "Embalagem econômica com 12 rolos de folha dupla extra macia e de alta absorção.",
+                origin: "Indústria de Higiene e Papéis",
+                storageTip: "Armazenar em local seco.",
+                nutrition: "Produto de Higiene Pessoal"
+            },
+            {
+                id: 3,
+                name: "Pão Francês Tradicional Crocante",
+                category: "padaria",
+                categoryLabel: "Padaria & Confeitaria",
+                price: 13.90,
+                unit: "kg",
+                image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&w=600&q=80",
+                badge: "Saída Quentinha",
+                rating: 5.0,
+                reviewsCount: 89,
+                description: "Casquinha crocante por fora e miolo macio e leve por dentro. Assado em 3 fornadas diárias na nossa padaria.",
+                origin: "Produção Própria no Forno da Mercearia",
+                storageTip: "Consumir no mesmo dia ou aquecer levemente na frigideira.",
+                nutrition: "Calories: 265kcal/100g | Carboidratos: 58g | Proteínas: 8g"
+            },
+            {
+                id: 4,
+                name: "Leite Integral Tipo A (1L)",
+                category: "frios",
+                categoryLabel: "Frios & Laticínios",
+                price: 5.49,
+                unit: "un",
+                image: "https://images.unsplash.com/photo-1563636619-e9143da7973b?auto=format&fit=crop&w=600&q=80",
+                badge: "Essencial",
+                rating: 4.8,
+                reviewsCount: 45,
+                description: "Leite fresco tipo A pasteurizado, rico em cálcio e nutrição para a família inteira.",
+                origin: "Laticínios Frescor do Vale",
+                storageTip: "Manter sob refrigeração entre 1°C e 7°C.",
+                nutrition: "Calories: 61kcal/100ml | Cálcio: 120mg | Proteínas: 3g"
+            },
+            {
+                id: 5,
+                name: "Café Torrado e Moído Tradicional (500g)",
+                category: "mercearia",
+                categoryLabel: "Mercearia Geral",
+                price: 17.50,
+                unit: "un",
+                image: "https://images.unsplash.com/photo-1559056199-641a0ac8b55e?auto=format&fit=crop&w=600&q=80",
+                badge: "Mais Vendido",
+                rating: 4.9,
+                reviewsCount: 62,
+                description: "Sabor intenso e aroma marcante do verdadeiro café brasileiro para começar o dia energizado.",
+                origin: "Cooperativa do Norte do Paraná",
+                storageTip: "Guardar em pote fechado e escuro longe da umidade.",
+                nutrition: "Bebida sem valor calórico expressivo"
+            },
+            {
+                id: 6,
+                name: "Detergente Líquido Neutro (500ml)",
+                category: "limpeza",
+                categoryLabel: "Limpeza & Higiene",
+                price: 2.89,
+                unit: "un",
+                image: "https://images.unsplash.com/photo-1585842378054-ee2e52f94ba2?auto=format&fit=crop&w=600&q=80",
+                badge: "Econômico",
+                rating: 4.6,
+                reviewsCount: 19,
+                description: "Rende muito mais na lavagem das louças, removendo gorduras sem agredir a pele das mãos.",
+                origin: "Indústria Química do Estado",
+                storageTip: "Manter fora do alcance de crianças.",
+                nutrition: "Produto de Limpeza"
+            },
+            {
+                id: 7,
+                name: "Ovos Caipiras Selecionados (Dúzia)",
+                category: "frios",
+                categoryLabel: "Frios & Laticínios",
+                price: 12.90,
+                unit: "bdj",
+                image: "https://images.unsplash.com/photo-1516467508483-a7212febe31a?auto=format&fit=crop&w=600&q=80",
+                badge: "Caipira Real",
+                rating: 4.9,
+                reviewsCount: 51,
+                description: "Ovos de galinhas criadas soltas no terreiro. Gema vermelhinha e sabor incomparável.",
+                origin: "Chácara Recanto das Aves",
+                storageTip: "Conservar em local seco ou na geladeira.",
+                nutrition: "Calories: 143kcal/100g | Proteínas: 13g | Gorduras: 9.5g"
+            },
+            {
+                id: 8,
+                name: "Queijo Minas Frescal Fatiado",
+                category: "frios",
+                categoryLabel: "Frios & Laticínios",
+                price: 38.90,
+                unit: "kg",
+                image: "https://images.unsplash.com/photo-1528751014936-863e6e7a319c?auto=format&fit=crop&w=600&q=80",
+                badge: "Fresquinho",
+                rating: 4.9,
+                reviewsCount: 33,
+                description: "Queijo leve, suave e bem molhadinho. Fatiado na hora em embalagem hermética.",
+                origin: "Queijaria Artesanal do Bairro",
+                storageTip: "Consumir refrigerado em até 5 dias.",
+                nutrition: "Calories: 264kcal/100g | Proteínas: 17g | Cálcio: 500mg"
+            },
+            {
+                id: 9,
+                name: "Maçã Gala Vermelha Crocante",
+                category: "horta",
+                categoryLabel: "Horta & Frutas",
+                price: 9.80,
+                unit: "kg",
+                image: "https://images.unsplash.com/photo-1560806887-1e4cd0b6cbd6?auto=format&fit=crop&w=600&q=80",
+                badge: "Doce & Sumulenta",
+                rating: 4.7,
+                reviewsCount: 28,
+                description: "Maçãs doces de casca fina e polpa firme. Perfeitas para o lanche da tarde das crianças.",
+                origin: "Pomar Serra de Santa Catarina",
+                storageTip: "Conservar em fruteira ou gaveta da geladeira.",
+                nutrition: "Calories: 52kcal/100g | Fibras: 2.4g | Carboidratos: 14g"
+            },
+            {
+                id: 10,
+                name: "Refrigerante Guaraná Lada (2L)",
+                category: "bebidas",
+                categoryLabel: "Bebidas Geladas",
+                price: 8.50,
+                unit: "un",
+                image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&w=600&q=80",
+                badge: "Geladinho",
+                rating: 4.8,
+                reviewsCount: 40,
+                description: "O sabor genuíno da fruta do guaraná em embalagem de 2 litros para acompanhar os almoços em família.",
+                origin: "Bebidas do Brasil",
+                storageTip: "Servir bem gelado.",
+                nutrition: "Calories: 80kcal/200ml | Carboidratos: 20g"
+            },
+            {
+                id: 11,
+                name: "Sabão em Pó Multiação (800g)",
+                category: "limpeza",
+                categoryLabel: "Limpeza & Higiene",
+                price: 14.90,
+                unit: "un",
+                image: "https://images.unsplash.com/photo-1610557892470-55d9e80c0bce?auto=format&fit=crop&w=600&q=80",
+                badge: "Rendimento",
+                rating: 4.6,
+                reviewsCount: 17,
+                description: "Limpa profundamente os tecidos removendo manchas sem desbotar as cores do vestuário.",
+                origin: "Indústria de Detergentes",
+                storageTip: "Manter em caixa fechada e ambiente seco.",
+                nutrition: "Produto de Limpeza"
+            },
+            {
+                id: 12,
+                name: "Farinha de Trigo Especial (1kg)",
+                category: "mercearia",
+                categoryLabel: "Mercearia Geral",
+                price: 4.90,
+                unit: "un",
+                image: "https://images.unsplash.com/photo-1574323347407-f5e1ad6d020b?auto=format&fit=crop&w=600&q=80",
+                badge: "Indispensável",
+                rating: 4.8,
+                reviewsCount: 31,
+                description: "Farinha Tipo 1 pura sem fermento, ideal para bolos, tortas, pães caseiros e salgados.",
+                origin: "Moinho Regional",
+                storageTip: "Guardar em recipiente limpo e vedado.",
+                nutrition: "Calories: 360kcal/100g | Carboidratos: 75g"
+            }
+        ];
+
+        let cartState = [];
+        let currentFilterCategory = 'all';
+        let appliedCoupon = null;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            renderHomeProducts();
+            renderCatalog();
+            updateCartBadge();
+            
+            // Handle Hash Routing if any
+            const hash = window.location.hash.replace('#', '');
+            if (['home', 'catalog', 'cart', 'about', 'contact'].includes(hash)) {
+                navigateTo(hash);
+            } else {
+                navigateTo('home');
+            }
+        });
+
+        function navigateTo(pageId, extraParam = null) {
+            // Hide all pages
+            const pages = ['home', 'catalog', 'product-detail', 'cart', 'about', 'contact'];
+            pages.forEach(p => {
+                const el = document.getElementById(`page-${p}`);
+                if (el) el.classList.add('hidden');
+            });
+
+            // Show selected page
+            const activePage = document.getElementById(`page-${pageId}`);
+            if (activePage) {
+                activePage.classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+
+            // Update Nav buttons styling
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('text-emerald-600', 'bg-emerald-50', 'font-extrabold');
+            });
+            const activeNavBtn = document.getElementById(`nav-${pageId}`);
+            if (activeNavBtn) {
+                activeNavBtn.classList.add('text-emerald-600', 'bg-emerald-50', 'font-extrabold');
+            }
+
+            // Update hash
+            window.location.hash = pageId;
+
+            // Page specific actions
+            if (pageId === 'cart') {
+                renderFullCart();
+            } else if (pageId === 'product-detail' && extraParam) {
+                renderProductDetailsPage(extraParam);
+            }
+        }
+
+        function renderHomeProducts() {
+            const grid = document.getElementById('homeProductsGrid');
+            if (!grid) return;
+
+            const featured = PRODUCTS.slice(0, 4);
+            grid.innerHTML = featured.map(p => createProductCardHTML(p)).join('');
+        }
+
+        function renderCatalog() {
+            const grid = document.getElementById('catalogProductsGrid');
+            const emptyState = document.getElementById('catalogEmptyState');
+            const searchInput = document.getElementById('catalogSearchInput');
+            const sortSelect = document.getElementById('catalogSort');
+
+            if (!grid) return;
+
+            let filtered = [...PRODUCTS];
+
+            // Category filter
+            if (currentFilterCategory !== 'all') {
+                filtered = filtered.filter(p => p.category === currentFilterCategory);
+            }
+
+            // Search query filter
+            const query = (searchInput ? searchInput.value : '').toLowerCase().trim();
+            if (query) {
+                filtered = filtered.filter(p => 
+                    p.name.toLowerCase().includes(query) || 
+                    p.categoryLabel.toLowerCase().includes(query) ||
+                    p.description.toLowerCase().includes(query)
+                );
+            }
+
+            // Sorting logic
+            const sortBy = sortSelect ? sortSelect.value : 'default';
+            if (sortBy === 'price-low') {
+                filtered.sort((a, b) => a.price - b.price);
+            } else if (sortBy === 'price-high') {
+                filtered.sort((a, b) => b.price - a.price);
+            } else if (sortBy === 'popular') {
+                filtered.sort((a, b) => b.reviewsCount - a.reviewsCount);
+            }
+
+            if (filtered.length === 0) {
+                grid.innerHTML = '';
+                emptyState.classList.remove('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                grid.innerHTML = filtered.map(p => createProductCardHTML(p)).join('');
+            }
+        }
+
+        function createProductCardHTML(p) {
+            return `
+                <div class="bg-white rounded-3xl border border-slate-200/80 shadow-sm hover:shadow-xl hover:border-emerald-300 transition-all duration-300 flex flex-col justify-between overflow-hidden group">
+                    <div class="relative overflow-hidden bg-slate-50 h-48 flex items-center justify-center p-2">
+                        <img src="${p.image}" alt="${p.name}" class="w-full h-full object-cover rounded-2xl group-hover:scale-105 transition duration-500">
+                        <span class="absolute top-3 left-3 bg-slate-900/80 backdrop-blur-md text-amber-400 text-[10px] font-extrabold px-2.5 py-1 rounded-full uppercase tracking-wider">
+                            ${p.badge}
+                        </span>
+                        <button onclick="navigateTo('product-detail', ${p.id})" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/90 text-slate-700 hover:text-emerald-600 flex items-center justify-center shadow opacity-0 group-hover:opacity-100 transition">
+                            <i class="fa-solid fa-eye text-xs"></i>
+                        </button>
+                    </div>
+
+                    <div class="p-5 flex-1 flex flex-col justify-between space-y-3">
+                        <div>
+                            <span class="text-[11px] font-bold text-emerald-700 uppercase tracking-wider block mb-1">${p.categoryLabel}</span>
+                            <h3 onclick="navigateTo('product-detail', ${p.id})" class="font-bold text-slate-800 text-sm hover:text-emerald-600 cursor-pointer line-clamp-1">
+                                ${p.name}
+                            </h3>
+                            <div class="flex items-center gap-1.5 text-xs text-slate-500 mt-1">
+                                <span class="text-amber-500">★ ${p.rating}</span>
+                                <span>(${p.reviewsCount} avaliações)</span>
+                            </div>
+                        </div>
+
+                        <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-2">
+                            <div>
+                                <span class="text-xs text-slate-400 font-medium block">Preço por ${p.unit}</span>
+                                <span class="text-lg font-black text-slate-900">R$ ${p.price.toFixed(2).replace('.', ',')}</span>
+                            </div>
+
+                            <div class="flex items-center gap-1.5">
+                                <button onclick="navigateTo('product-detail', ${p.id})" class="p-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-xs transition" title="Ver Detalhes">
+                                    <i class="fa-solid fa-info-circle"></i>
+                                </button>
+                                <button onclick="quickAddToCart(${p.id})" class="px-3 py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-xl text-xs shadow-md transition flex items-center gap-1">
+                                    <i class="fa-solid fa-plus"></i> <span class="hidden sm:inline">Adicionar</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function setCategoryFilter(cat) {
+            currentFilterCategory = cat;
+            document.querySelectorAll('.cat-filter-btn').forEach(btn => {
+                btn.classList.remove('bg-emerald-600', 'text-white', 'border-emerald-600');
+                btn.classList.add('bg-slate-50', 'text-slate-700', 'border-slate-200');
+            });
+            const activeBtn = document.getElementById(`cat-btn-${cat}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('bg-slate-50', 'text-slate-700', 'border-slate-200');
+                activeBtn.classList.add('bg-emerald-600', 'text-white', 'border-emerald-600');
+            }
+            renderCatalog();
+        }
+
+        function filterByCategory(cat) {
+            setCategoryFilter(cat);
+            navigateTo('catalog');
+        }
+
+        function resetFilters() {
+            const searchInput = document.getElementById('catalogSearchInput');
+            if (searchInput) searchInput.value = '';
+            setCategoryFilter('all');
+        }
+
+        function handleHeaderSearch(e) {
+            if (e.key === 'Enter') {
+                executeHeaderSearch();
+            }
+        }
+
+        function executeHeaderSearch() {
+            const deskInput = document.getElementById('headerSearchInput');
+            const mobInput = document.getElementById('mobileHeaderSearchInput');
+            const query = (deskInput ? deskInput.value : '') || (mobInput ? mobInput.value : '');
+
+            navigateTo('catalog');
+            const catSearch = document.getElementById('catalogSearchInput');
+            if (catSearch) {
+                catSearch.value = query;
+                renderCatalog();
+            }
+        }
+
+        function renderProductDetailsPage(productId) {
+            const product = PRODUCTS.find(p => p.id === productId) || PRODUCTS[0];
+            
+            document.getElementById('detailBreadcrumbName').textContent = product.name;
+
+            const container = document.getElementById('productDetailContent');
+            container.innerHTML = `
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                    
+                    <!-- Product Image Preview -->
+                    <div class="space-y-4">
+                        <div class="relative bg-slate-50 rounded-3xl overflow-hidden border border-slate-200 h-80 sm:h-96 flex items-center justify-center p-4">
+                            <img src="${product.image}" alt="${product.name}" class="w-full h-full object-cover rounded-2xl">
+                            <span class="absolute top-4 left-4 bg-emerald-700 text-white text-xs font-bold px-3 py-1.5 rounded-full uppercase tracking-wider shadow">
+                                ${product.badge}
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Details & Controls -->
+                    <div class="space-y-6">
+                        <div>
+                            <span class="text-xs font-bold text-emerald-700 uppercase tracking-widest block mb-1">${product.categoryLabel}</span>
+                            <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900">${product.name}</h1>
+                            <div class="flex items-center gap-3 text-sm text-slate-500 mt-2">
+                                <span class="text-amber-500 font-bold">★ ${product.rating}</span>
+                                <span>•</span>
+                                <span>${product.reviewsCount} opiniões de clientes do bairro</span>
+                            </div>
+                        </div>
+
+                        <div class="bg-emerald-50/60 p-4 rounded-2xl border border-emerald-100 flex items-center justify-between">
+                            <div>
+                                <span class="text-xs text-slate-500 block">Preço unitário por ${product.unit}</span>
+                                <span class="text-3xl font-black text-emerald-800">R$ ${product.price.toFixed(2).replace('.', ',')}</span>
+                            </div>
+                            <span class="text-xs bg-emerald-200 text-emerald-900 font-bold px-3 py-1 rounded-full">Em Estoque na Loja</span>
+                        </div>
+
+                        <p class="text-sm text-slate-600 leading-relaxed">${product.description}</p>
+
+                        <!-- Quantity Selector & Add Button -->
+                        <div class="space-y-3 pt-2">
+                            <label class="text-xs font-bold text-slate-700 uppercase tracking-wider block">Selecione a Quantidade (${product.unit}):</label>
+                            <div class="flex items-center gap-4">
+                                <div class="flex items-center border border-slate-300 rounded-2xl bg-slate-50 p-1">
+                                    <button onclick="adjustDetailQty(-1)" class="w-10 h-10 rounded-xl bg-white hover:bg-slate-200 font-bold text-slate-800 flex items-center justify-center text-lg shadow-sm">
+                                        -
+                                    </button>
+                                    <span id="detailQtyVal" class="w-12 text-center font-extrabold text-slate-900">1</span>
+                                    <button onclick="adjustDetailQty(1)" class="w-10 h-10 rounded-xl bg-white hover:bg-slate-200 font-bold text-slate-800 flex items-center justify-center text-lg shadow-sm">
+                                        +
+                                    </button>
+                                </div>
+
+                                <button onclick="addCurrentDetailToCart(${product.id})" class="flex-1 py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold rounded-2xl shadow-lg transition flex items-center justify-center gap-2 text-sm sm:text-base">
+                                    <i class="fa-solid fa-basket-shopping"></i> Adicionar à Sacola
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Specifications Tabs Accordion / Box -->
+                        <div class="border-t border-slate-200 pt-6 space-y-4 text-xs sm:text-sm">
+                            <div class="bg-slate-50 p-4 rounded-2xl space-y-1">
+                                <span class="font-bold text-slate-800 block">📍 Origem do Produto:</span>
+                                <p class="text-slate-600">${product.origin}</p>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-2xl space-y-1">
+                                <span class="font-bold text-slate-800 block">💡 Dicas de Conservação:</span>
+                                <p class="text-slate-600">${product.storageTip}</p>
+                            </div>
+                            <div class="bg-slate-50 p-4 rounded-2xl space-y-1">
+                                <span class="font-bold text-slate-800 block">📊 Tabela / Especificações:</span>
+                                <p class="text-slate-600">${product.nutrition}</p>
+                            </div>
+                        </div>
+
+                        <!-- Neighborhood Freight Calculator -->
+                        <div class="p-5 bg-amber-50/70 border border-amber-200 rounded-3xl space-y-3">
+                            <h4 class="font-bold text-amber-900 text-xs sm:text-sm flex items-center gap-2">
+                                <i class="fa-solid fa-truck-ramp-box text-amber-600"></i> Simular Valor de Frete do Bairro
+                            </h4>
+                            <div class="flex gap-2">
+                                <select id="neighborhoodSelect" class="flex-1 px-3 py-2 bg-white border border-amber-200 rounded-xl text-xs font-semibold outline-none">
+                                    <option value="5">Jardim Central (Sede) - R$ 5,00</option>
+                                    <option value="7">Vila Operária - R$ 7,00</option>
+                                    <option value="8">Parque das Palmeiras - R$ 8,00</option>
+                                    <option value="0">Retirar na Mercearia - Grátis</option>
+                                </select>
+                                <button onclick="calculateFreight()" class="px-4 py-2 bg-amber-600 text-white font-bold text-xs rounded-xl hover:bg-amber-700">
+                                    Calcular
+                                </button>
+                            </div>
+                            <p id="freightResultMsg" class="text-xs text-amber-900 font-semibold hidden"></p>
+                        </div>
+
+                    </div>
+                </div>
+            `;
+
+            // Render Related Products
+            const related = PRODUCTS.filter(p => p.id !== product.id).slice(0, 4);
+            document.getElementById('relatedProductsGrid').innerHTML = related.map(p => createProductCardHTML(p)).join('');
+        }
+
+        let detailQty = 1;
+        function adjustDetailQty(delta) {
+            detailQty = Math.max(1, detailQty + delta);
+            const qtyEl = document.getElementById('detailQtyVal');
+            if (qtyEl) qtyEl.textContent = detailQty;
+        }
+
+        function addCurrentDetailToCart(productId) {
+            const product = PRODUCTS.find(p => p.id === productId);
+            if (!product) return;
+
+            const existing = cartState.find(item => item.product.id === productId);
+            if (existing) {
+                existing.quantity += detailQty;
+            } else {
+                cartState.push({ product: product, quantity: detailQty });
+            }
+
+            detailQty = 1;
+            updateCartBadge();
+            showToast("Item Adicionado", `${product.name} foi adicionado à sua sacola.`);
+        }
+
+        function calculateFreight() {
+            const select = document.getElementById('neighborhoodSelect');
+            const msg = document.getElementById('freightResultMsg');
+            if (!select || !msg) return;
+
+            const val = parseFloat(select.value);
+            if (val === 0) {
+                msg.textContent = "✓ Retirada na loja em 15min sem custo de frete!";
+            } else {
+                msg.textContent = `✓ Frete para essa região: R$ ${val.toFixed(2).replace('.', ',')} (Tempo estimado: 35 min)`;
+            }
+            msg.classList.remove('hidden');
+        }
+
+        function quickAddToCart(productId) {
+            const product = PRODUCTS.find(p => p.id === productId);
+            if (!product) return;
+
+            const existing = cartState.find(item => item.product.id === productId);
+            if (existing) {
+                existing.quantity += 1;
+            } else {
+                cartState.push({ product: product, quantity: 1 });
+            }
+
+            updateCartBadge();
+            showToast("Sacola Atualizada", `1x ${product.name} adicionado.`);
+        }
+
+        function updateCartBadge() {
+            const totalCount = cartState.reduce((sum, item) => sum + item.quantity, 0);
+            const badge = document.getElementById('headerCartCount');
+            if (badge) badge.textContent = totalCount;
+
+            renderQuickCartDrawer();
+        }
+
+        function toggleQuickCart() {
+            const drawer = document.getElementById('quickCartDrawer');
+            const overlay = document.getElementById('quickCartOverlay');
+            if (!drawer || !overlay) return;
+
+            if (drawer.classList.contains('translate-x-full')) {
+                drawer.classList.remove('translate-x-full');
+                overlay.classList.remove('hidden');
+            } else {
+                drawer.classList.add('translate-x-full');
+                overlay.classList.add('hidden');
+            }
+        }
+
+        function renderQuickCartDrawer() {
+            const container = document.getElementById('quickCartItems');
+            const subtotalEl = document.getElementById('quickCartSubtotal');
+            if (!container) return;
+
+            if (cartState.length === 0) {
+                container.innerHTML = `
+                    <div class="text-center py-10 text-slate-400 space-y-2">
+                        <i class="fa-solid fa-basket-shopping text-4xl mb-2"></i>
+                        <p class="text-sm font-semibold">Sua sacola está vazia.</p>
+                    </div>
+                `;
+                if (subtotalEl) subtotalEl.textContent = 'R$ 0,00';
+                return;
+            }
+
+            let subtotal = 0;
+            container.innerHTML = cartState.map(item => {
+                const itemSub = item.product.price * item.quantity;
+                subtotal += itemSub;
+
+                return `
+                    <div class="flex items-center gap-3 pt-3">
+                        <img src="${item.product.image}" class="w-14 h-14 rounded-xl object-cover bg-slate-100 border border-slate-200">
+                        <div class="flex-1 min-w-0">
+                            <h4 class="font-bold text-xs text-slate-800 truncate">${item.product.name}</h4>
+                            <p class="text-[11px] text-slate-500">R$ ${item.product.price.toFixed(2).replace('.', ',')} / ${item.product.unit}</p>
+                            <div class="flex items-center gap-2 mt-1">
+                                <button onclick="changeItemQty(${item.product.id}, -1)" class="w-6 h-6 rounded bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700 flex items-center justify-center">-</button>
+                                <span class="text-xs font-bold text-slate-800">${item.quantity}</span>
+                                <button onclick="changeItemQty(${item.product.id}, 1)" class="w-6 h-6 rounded bg-slate-100 hover:bg-slate-200 text-xs font-bold text-slate-700 flex items-center justify-center">+</button>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-xs font-black text-slate-900 block">R$ ${itemSub.toFixed(2).replace('.', ',')}</span>
+                            <button onclick="removeItemFromCart(${item.product.id})" class="text-[11px] text-red-500 hover:underline">Remover</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            if (subtotalEl) subtotalEl.textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+        }
+
+        function changeItemQty(productId, delta) {
+            const item = cartState.find(i => i.product.id === productId);
+            if (!item) return;
+
+            item.quantity += delta;
+            if (item.quantity <= 0) {
+                cartState = cartState.filter(i => i.product.id !== productId);
+            }
+
+            updateCartBadge();
+            if (!document.getElementById('page-cart').classList.contains('hidden')) {
+                renderFullCart();
+            }
+        }
+
+        function removeItemFromCart(productId) {
+            cartState = cartState.filter(i => i.product.id !== productId);
+            updateCartBadge();
+            if (!document.getElementById('page-cart').classList.contains('hidden')) {
+                renderFullCart();
+            }
+            showToast("Item Removido", "O produto foi retirado da sua sacola.");
+        }
+
+        function clearCart() {
+            cartState = [];
+            updateCartBadge();
+            renderFullCart();
+            showToast("Sacola Limpa", "Sua sacola foi esvaziada.");
+        }
+
+        function renderFullCart() {
+            const container = document.getElementById('fullCartItemsContainer');
+            const emptyMsg = document.getElementById('fullCartEmptyMessage');
+            const totalCountEl = document.getElementById('cartTotalItemsCount');
+            const subtotalText = document.getElementById('cartSubtotalText');
+            const discountRow = document.getElementById('cartDiscountRow');
+            const discountText = document.getElementById('cartDiscountText');
+            const totalText = document.getElementById('cartTotalText');
+
+            if (!container) return;
+
+            const totalCount = cartState.reduce((sum, item) => sum + item.quantity, 0);
+            if (totalCountEl) totalCountEl.textContent = totalCount;
+
+            if (cartState.length === 0) {
+                container.innerHTML = '';
+                if (emptyMsg) emptyMsg.classList.remove('hidden');
+                if (subtotalText) subtotalText.textContent = 'R$ 0,00';
+                if (totalText) totalText.textContent = 'R$ 0,00';
+                return;
+            }
+
+            if (emptyMsg) emptyMsg.classList.add('hidden');
+
+            let subtotal = 0;
+            container.innerHTML = cartState.map(item => {
+                const itemSub = item.product.price * item.quantity;
+                subtotal += itemSub;
+
+                return `
+                    <div class="py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
+                        <div class="flex items-center gap-4 w-full sm:w-auto">
+                            <img src="${item.product.image}" class="w-16 h-16 rounded-2xl object-cover bg-slate-100 border border-slate-200">
+                            <div>
+                                <h4 class="font-extrabold text-slate-800 text-sm sm:text-base">${item.product.name}</h4>
+                                <span class="text-xs text-slate-500">${item.product.categoryLabel} • R$ ${item.product.price.toFixed(2).replace('.', ',')} / ${item.product.unit}</span>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between w-full sm:w-auto gap-6">
+                            <div class="flex items-center border border-slate-200 rounded-xl bg-slate-50 p-1">
+                                <button onclick="changeItemQty(${item.product.id}, -1)" class="w-8 h-8 rounded-lg bg-white font-bold text-slate-700 shadow-sm">-</button>
+                                <span class="w-8 text-center text-xs font-bold text-slate-800">${item.quantity}</span>
+                                <button onclick="changeItemQty(${item.product.id}, 1)" class="w-8 h-8 rounded-lg bg-white font-bold text-slate-700 shadow-sm">+</button>
+                            </div>
+
+                            <div class="text-right">
+                                <span class="text-base font-extrabold text-slate-900 block">R$ ${itemSub.toFixed(2).replace('.', ',')}</span>
+                                <button onclick="removeItemFromCart(${item.product.id})" class="text-xs text-red-600 hover:underline">
+                                    Excluir
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            const shipping = 5.00;
+            let discount = 0;
+            if (appliedCoupon === 'PRIMEIRACOMPRA') {
+                discount = subtotal * 0.10;
+                if (discountRow) discountRow.classList.remove('hidden');
+                if (discountText) discountText.textContent = `- R$ ${discount.toFixed(2).replace('.', ',')}`;
+            } else {
+                if (discountRow) discountRow.classList.add('hidden');
+            }
+
+            const total = subtotal + shipping - discount;
+            if (subtotalText) subtotalText.textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+            if (totalText) totalText.textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+        }
+
+        function applyCoupon() {
+            const input = document.getElementById('couponInput');
+            const msg = document.getElementById('couponMsg');
+            if (!input) return;
+
+            const val = input.value.trim().toUpperCase();
+            if (val === 'PRIMEIRACOMPRA') {
+                appliedCoupon = 'PRIMEIRACOMPRA';
+                if (msg) msg.classList.remove('hidden');
+                renderFullCart();
+                showToast("Cupom Aplicado", "Você ganhou 10% de desconto na sacola!");
+            } else {
+                showToast("Cupom Inválido", "Tente utilizar o código PRIMEIRACOMPRA.");
+            }
+        }
+
+        function toggleFaq(index) {
+            const content = document.getElementById(`faq-content-${index}`);
+            const icon = document.getElementById(`faq-icon-${index}`);
+            if (!content || !icon) return;
+
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.style.transform = 'rotate(180deg)';
+            } else {
+                content.classList.add('hidden');
+                icon.style.transform = 'rotate(0deg)';
+            }
+        }
+
+        function handleContactSubmit(e) {
+            e.preventDefault();
+            const form = document.getElementById('contactForm');
+            if (form) form.reset();
+            showToast("Mensagem Enviada!", "Nossa equipe do Cantinho responderá em breve.");
+        }
+
+        function toggleMobileNav() {
+            const menu = document.getElementById('mobileNavMenu');
+            if (menu) menu.classList.toggle('hidden');
+        }
+
+        let toastTimer = null;
+        function showToast(title, message) {
+            const toast = document.getElementById('toastNotification');
+            const titleEl = document.getElementById('toastTitle');
+            const msgEl = document.getElementById('toastMessage');
+
+            if (!toast) return;
+
+            if (titleEl) titleEl.textContent = title;
+            if (msgEl) msgEl.textContent = message;
+
+            toast.classList.remove('translate-y-20', 'opacity-0');
+            toast.classList.add('translate-y-0', 'opacity-100');
+
+            if (toastTimer) clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => {
+                toast.classList.remove('translate-y-0', 'opacity-100');
+                toast.classList.add('translate-y-20', 'opacity-0');
+            }, 3500);
+        }
+    </script>
+</body>
+</html>
