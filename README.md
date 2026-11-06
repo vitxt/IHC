@@ -1,6 +1,5 @@
 # Guia do Teste de Usabilidade — Mercearia Cantinho do Bairro
 
-Este documento descreve o roteiro e as instruções passo a passo para a realização do **Teste de Usabilidade** do protótipo **"Mercearia Cantinho do Bairro: Sistema de Compras e Encomendas Online de Vizinhança"**.
 ---
 
 > [!IMPORTANT]
